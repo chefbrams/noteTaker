@@ -10,26 +10,26 @@ var PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static("public"));
+app.use(express.static("assets"));
 
 // script files
-require("./routes/apiRoutes")(app);
-require(".routes/htmlRoutes")(app);
+// require("./apiRoutes")(app);
+// require("./htmlRoutes")(app);
 
-module.exports = function (app) {
+// module.exports = function (app) {
 
-    // route for index.html
-    app.get("/", function (req, res) {
-        res.sendFile(path.join(__dirname, "../public/index.html"));
-    });
+// route for index.html
+app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "./public/index.html"));
+});
 
-    //  route for notes.html
-    app.get("/notes", function (req, res) {
-        res.sendFile(path.join(__dirname, "../public/notes.html"));
-    });
+//  route for notes.html
+app.get("/notes", function (req, res) {
+    res.sendFile(path.join(__dirname, "./public/notes.html"));
+});
 
-}
-savedNote = require("../db/db.json");
+// }
+savedNote = require("./db/db.json");
 
 module.exports = function (app) {
 
@@ -64,7 +64,7 @@ module.exports = function (app) {
         savedNote.push(req.body);
 
         //use function above to write to file
-        saveToDB(savedNote);
+        savesToDB(savedNote);
 
         //respond with the note in JSON
         res.json(req.body);
@@ -80,7 +80,7 @@ module.exports = function (app) {
         for (i = 0; i < savedNote.length; i++) {
             if (savedNote[i].id === id) {
                 //respond note to be deleted
-                res.send(noteData[i]);
+                res.send(savedNote[i]);
                 //remove note from array
                 savedNote.splice(i, 1);
                 break;
@@ -88,7 +88,7 @@ module.exports = function (app) {
         }
 
         // write entire note array to db again
-        writeToDB(noteData);
+        savesToDB(savedNote);
 
     })
 
